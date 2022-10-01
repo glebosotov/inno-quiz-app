@@ -12,6 +12,7 @@ import 'package:inno_quiz_app/presentation/pages/navigation/router.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  GoogleFonts.config.allowRuntimeFetching = false;
   WidgetsFlutterBinding.ensureInitialized();
   LicenseRegistry.addLicense(() async* {
     final license = await rootBundle.loadString('google_fonts/OFL.txt');
