@@ -1,12 +1,19 @@
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:inno_quiz_app/presentation/locator.dart';
 import 'package:inno_quiz_app/presentation/pages/navigation/router.dart';
 
 import 'firebase_options.dart';
 
 void main() async {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  WidgetsFlutterBinding.ensureInitialized();
+  final app = await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform);
+  log(app.toString());
+  initLocator();
   runApp(
     ProviderScope(
       child: const MyApp(),

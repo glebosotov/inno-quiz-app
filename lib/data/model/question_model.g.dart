@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'queation_model.dart';
+part of 'question_model.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -21,6 +21,8 @@ class _$QuestionModelSerializer implements StructuredSerializer<QuestionModel> {
     final result = <Object?>[
       'text',
       serializers.serialize(object.text, specifiedType: const FullType(String)),
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(String)),
     ];
 
     return result;
@@ -42,6 +44,10 @@ class _$QuestionModelSerializer implements StructuredSerializer<QuestionModel> {
           result.text = serializers.deserialize(value,
               specifiedType: const FullType(String))! as String;
           break;
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(String))! as String;
+          break;
       }
     }
 
@@ -52,12 +58,15 @@ class _$QuestionModelSerializer implements StructuredSerializer<QuestionModel> {
 class _$QuestionModel extends QuestionModel {
   @override
   final String text;
+  @override
+  final String id;
 
   factory _$QuestionModel([void Function(QuestionModelBuilder)? updates]) =>
       (new QuestionModelBuilder()..update(updates))._build();
 
-  _$QuestionModel._({required this.text}) : super._() {
+  _$QuestionModel._({required this.text, required this.id}) : super._() {
     BuiltValueNullFieldError.checkNotNull(text, r'QuestionModel', 'text');
+    BuiltValueNullFieldError.checkNotNull(id, r'QuestionModel', 'id');
   }
 
   @override
@@ -70,17 +79,19 @@ class _$QuestionModel extends QuestionModel {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is QuestionModel && text == other.text;
+    return other is QuestionModel && text == other.text && id == other.id;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, text.hashCode));
+    return $jf($jc($jc(0, text.hashCode), id.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'QuestionModel')..add('text', text))
+    return (newBuiltValueToStringHelper(r'QuestionModel')
+          ..add('text', text)
+          ..add('id', id))
         .toString();
   }
 }
@@ -93,12 +104,17 @@ class QuestionModelBuilder
   String? get text => _$this._text;
   set text(String? text) => _$this._text = text;
 
+  String? _id;
+  String? get id => _$this._id;
+  set id(String? id) => _$this._id = id;
+
   QuestionModelBuilder();
 
   QuestionModelBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
       _text = $v.text;
+      _id = $v.id;
       _$v = null;
     }
     return this;
@@ -122,7 +138,9 @@ class QuestionModelBuilder
     final _$result = _$v ??
         new _$QuestionModel._(
             text: BuiltValueNullFieldError.checkNotNull(
-                text, r'QuestionModel', 'text'));
+                text, r'QuestionModel', 'text'),
+            id: BuiltValueNullFieldError.checkNotNull(
+                id, r'QuestionModel', 'id'));
     replace(_$result);
     return _$result;
   }

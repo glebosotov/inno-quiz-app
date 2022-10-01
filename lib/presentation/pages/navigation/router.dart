@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:inno_quiz_app/presentation/pages/main_page.dart';
 import 'package:inno_quiz_app/presentation/pages/quiz_page.dart';
+import 'package:inno_quiz_app/presentation/pages/result_screen.dart';
 
 part 'router.gr.dart';
 
@@ -10,6 +11,7 @@ part 'router.gr.dart';
   routes: <AutoRoute>[
     AutoRoute(page: MainPage, initial: true),
     AutoRoute(page: QuizPage),
+    AutoRoute(page: ResultPage),
   ],
 )
 class AppRouter extends _$AppRouter {}

@@ -54,11 +54,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyAcDxIKCVUb0YiE6HNvo9sBF0OLGaL14Xs',
-    appId: '1:304492835662:web:3b083e0d2584f4e271e41f',
-    messagingSenderId: '304492835662',
-    projectId: 'quiz-app-inno',
     authDomain: 'quiz-app-inno.firebaseapp.com',
+    projectId: 'quiz-app-inno',
     storageBucket: 'quiz-app-inno.appspot.com',
+    messagingSenderId: '304492835662',
+    appId: '1:304492835662:web:3b083e0d2584f4e271e41f',
     measurementId: 'G-2C2FZK3N8P',
   );
 }

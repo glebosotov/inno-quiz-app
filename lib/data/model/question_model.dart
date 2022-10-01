@@ -2,11 +2,12 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:inno_quiz_app/data/model/serializers.dart';
 
-part 'queation_model.g.dart';
+part 'question_model.g.dart';
 
 abstract class QuestionModel
     implements Built<QuestionModel, QuestionModelBuilder> {
   String get text;
+  String get id;
 
   QuestionModel._();
   factory QuestionModel([void Function(QuestionModelBuilder) updates]) =

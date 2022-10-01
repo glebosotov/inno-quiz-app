@@ -24,9 +24,20 @@ class _$AppRouter extends RootStackRouter {
       );
     },
     QuizRoute.name: (routeData) {
+      final args =
+          routeData.argsAs<QuizRouteArgs>(orElse: () => const QuizRouteArgs());
       return AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const QuizPage(),
+        child: QuizPage(
+          quizName: args.quizName,
+          key: args.key,
+        ),
+      );
+    },
+    ResultRoute.name: (routeData) {
+      return AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: const ResultPage(),
       );
     },
   };
@@ -40,6 +51,10 @@ class _$AppRouter extends RootStackRouter {
         RouteConfig(
           QuizRoute.name,
           path: '/quiz-page',
+        ),
+        RouteConfig(
+          ResultRoute.name,
+          path: '/result-page',
         ),
       ];
 }
@@ -58,12 +73,46 @@ class MainRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [QuizPage]
-class QuizRoute extends PageRouteInfo<void> {
-  const QuizRoute()
-      : super(
+class QuizRoute extends PageRouteInfo<QuizRouteArgs> {
+  QuizRoute({
+    String quizName = 'Quiz 1',
+    Key? key,
+  }) : super(
           QuizRoute.name,
           path: '/quiz-page',
+          args: QuizRouteArgs(
+            quizName: quizName,
+            key: key,
+          ),
         );
 
   static const String name = 'QuizRoute';
+}
+
+class QuizRouteArgs {
+  const QuizRouteArgs({
+    this.quizName = 'Quiz 1',
+    this.key,
+  });
+
+  final String quizName;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'QuizRouteArgs{quizName: $quizName, key: $key}';
+  }
+}
+
+/// generated route for
+/// [ResultPage]
+class ResultRoute extends PageRouteInfo<void> {
+  const ResultRoute()
+      : super(
+          ResultRoute.name,
+          path: '/result-page',
+        );
+
+  static const String name = 'ResultRoute';
 }

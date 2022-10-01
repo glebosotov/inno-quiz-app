@@ -41,6 +41,7 @@ dependencies:
   flutter_riverpod: ^2.0.0
   built_value: ^8.4.1
   built_collection: ^5.1.1
+  cloud_firestore: ^3.5.0
 
 dev_dependencies:
   flutter_test:
