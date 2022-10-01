@@ -37,6 +37,7 @@ class _MyAppState extends State<MyApp> {
       routeInformationParser: appRouter.defaultRouteParser(),
       title: 'Quiz App',
       theme: ThemeData(
+        fontFamily: 'Roboto',
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyanAccent),
       ),
