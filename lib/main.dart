@@ -38,8 +38,10 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late AppRouter appRouter = AppRouter();
+
   @override
   Widget build(BuildContext context) {
+    int a = 3;
     return MaterialApp.router(
       routerDelegate: appRouter.delegate(),
       routeInformationParser: appRouter.defaultRouteParser(),
