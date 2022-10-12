@@ -53,6 +53,32 @@ class _QuizLayoutState extends ConsumerState<QuizLayout> {
                         maxLines: 5,
                         overflow: TextOverflow.ellipsis,
                       ),
+                      const SizedBox(height: 20),
+                      ...widget.quiz.questions[index].answers.entries
+                          .map(
+                            (e) => TextButton(
+                              onPressed: () {
+                                ref.read(quizRepository).updateResult(
+                                    widget
+                                        .quiz
+                                        .questions[_pageController.page!.ceil()]
+                                        .id,
+                                    e.key);
+                                if (widget.quiz.questions.length - 1 >
+                                    _pageController.page!) {
+                                  _pageController.nextPage(
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      curve: Curves.easeIn);
+                                } else {
+                                  ref.read(quizRepository).saveResult();
+                                  context.router.replace(ResultRoute());
+                                }
+                              },
+                              child: Text(e.value),
+                            ),
+                          )
+                          .toList(),
                     ],
                   ),
                 );
@@ -60,32 +86,33 @@ class _QuizLayoutState extends ConsumerState<QuizLayout> {
             ),
           ),
           const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [-2, -1, 0, 1, 2]
-                .map(
-                  (e) => ElevatedButton(
-                    onPressed: () {
-                      ref.read(quizRepository).updateResult(
-                          widget
-                              .quiz.questions[_pageController.page!.ceil()].id,
-                          e.toString());
-                      if (widget.quiz.questions.length - 1 >
-                          _pageController.page!) {
-                        _pageController.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeIn);
-                      } else {
-                        ref.read(quizRepository).saveResult();
-                        context.router.replace(ResultRoute());
-                      }
-                    },
-                    child: Text(e.toString(),
-                        style: Theme.of(context).textTheme.bodyLarge),
-                  ),
-                )
-                .toList(),
-          ),
+
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [-2, -1, 0, 1, 2]
+          //       .map(
+          //         (e) => ElevatedButton(
+          //           onPressed: () {
+          //             ref.read(quizRepository).updateResult(
+          //                 widget
+          //                     .quiz.questions[_pageController.page!.ceil()].id,
+          //                 e.toString());
+          //             if (widget.quiz.questions.length - 1 >
+          //                 _pageController.page!) {
+          //               _pageController.nextPage(
+          //                   duration: const Duration(milliseconds: 300),
+          //                   curve: Curves.easeIn);
+          //             } else {
+          //               ref.read(quizRepository).saveResult();
+          //               context.router.replace(ResultRoute());
+          //             }
+          //           },
+          //           child: Text(e.toString(),
+          //               style: Theme.of(context).textTheme.bodyLarge),
+          //         ),
+          //       )
+          //       .toList(),
+          // ),
           const SizedBox(height: 20),
           ElevatedButton(
               onPressed: _pageController.hasClients

@@ -23,6 +23,10 @@ class _$QuestionModelSerializer implements StructuredSerializer<QuestionModel> {
       serializers.serialize(object.text, specifiedType: const FullType(String)),
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(String)),
+      'answers',
+      serializers.serialize(object.answers,
+          specifiedType: const FullType(BuiltMap,
+              const [const FullType(String), const FullType(String)])),
     ];
 
     return result;
@@ -48,6 +52,11 @@ class _$QuestionModelSerializer implements StructuredSerializer<QuestionModel> {
           result.id = serializers.deserialize(value,
               specifiedType: const FullType(String))! as String;
           break;
+        case 'answers':
+          result.answers.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltMap,
+                  const [const FullType(String), const FullType(String)]))!);
+          break;
       }
     }
 
@@ -60,13 +69,18 @@ class _$QuestionModel extends QuestionModel {
   final String text;
   @override
   final String id;
+  @override
+  final BuiltMap<String, String> answers;
 
   factory _$QuestionModel([void Function(QuestionModelBuilder)? updates]) =>
       (new QuestionModelBuilder()..update(updates))._build();
 
-  _$QuestionModel._({required this.text, required this.id}) : super._() {
+  _$QuestionModel._(
+      {required this.text, required this.id, required this.answers})
+      : super._() {
     BuiltValueNullFieldError.checkNotNull(text, r'QuestionModel', 'text');
     BuiltValueNullFieldError.checkNotNull(id, r'QuestionModel', 'id');
+    BuiltValueNullFieldError.checkNotNull(answers, r'QuestionModel', 'answers');
   }
 
   @override
@@ -79,19 +93,23 @@ class _$QuestionModel extends QuestionModel {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is QuestionModel && text == other.text && id == other.id;
+    return other is QuestionModel &&
+        text == other.text &&
+        id == other.id &&
+        answers == other.answers;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, text.hashCode), id.hashCode));
+    return $jf($jc($jc($jc(0, text.hashCode), id.hashCode), answers.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper(r'QuestionModel')
           ..add('text', text)
-          ..add('id', id))
+          ..add('id', id)
+          ..add('answers', answers))
         .toString();
   }
 }
@@ -108,6 +126,11 @@ class QuestionModelBuilder
   String? get id => _$this._id;
   set id(String? id) => _$this._id = id;
 
+  MapBuilder<String, String>? _answers;
+  MapBuilder<String, String> get answers =>
+      _$this._answers ??= new MapBuilder<String, String>();
+  set answers(MapBuilder<String, String>? answers) => _$this._answers = answers;
+
   QuestionModelBuilder();
 
   QuestionModelBuilder get _$this {
@@ -115,6 +138,7 @@ class QuestionModelBuilder
     if ($v != null) {
       _text = $v.text;
       _id = $v.id;
+      _answers = $v.answers.toBuilder();
       _$v = null;
     }
     return this;
@@ -135,12 +159,26 @@ class QuestionModelBuilder
   QuestionModel build() => _build();
 
   _$QuestionModel _build() {
-    final _$result = _$v ??
-        new _$QuestionModel._(
-            text: BuiltValueNullFieldError.checkNotNull(
-                text, r'QuestionModel', 'text'),
-            id: BuiltValueNullFieldError.checkNotNull(
-                id, r'QuestionModel', 'id'));
+    _$QuestionModel _$result;
+    try {
+      _$result = _$v ??
+          new _$QuestionModel._(
+              text: BuiltValueNullFieldError.checkNotNull(
+                  text, r'QuestionModel', 'text'),
+              id: BuiltValueNullFieldError.checkNotNull(
+                  id, r'QuestionModel', 'id'),
+              answers: answers.build());
+    } catch (_) {
+      late String _$failedField;
+      try {
+        _$failedField = 'answers';
+        answers.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            r'QuestionModel', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

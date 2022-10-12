@@ -22,12 +22,18 @@ class QuizRepository {
         .get();
 
     final quizModel = QuizModel.fromJson(quiz.docs.first.data());
+
     if (quizModel == null) {
       throw Exception('Quiz not found');
     }
+    final quizModelWithQuestionIds = quizModel.rebuild(
+      (b) => b
+        ..questions = ListBuilder(quizModel.questions.rebuild((p0) =>
+            p0.replace(List.generate(9, (index) => (index + 1).toString())))),
+    );
 
     final questions = await Future.wait(
-      quizModel.questions.map((p0) => getQuestion(p0)),
+      quizModelWithQuestionIds.questions.map((p0) => getQuestion(p0)),
       eagerError: true,
     );
 
@@ -39,15 +45,17 @@ class QuizRepository {
 
   Future<QuestionModel> getQuestion(String questionId) async {
     // log('getting question $questionId');
-    final question =
-        await _firestore.collection('questions').doc(questionId).get();
+    final question = await _firestore
+        .collection('questions')
+        .where('id', isEqualTo: questionId)
+        .get();
     // log(question.data().toString());
-    if (question.data() == null) {
-      throw Exception('Question not found');
+    if (question.docs.isEmpty) {
+      throw Exception('Question $questionId not found');
     }
-    final questionModel = QuestionModel.fromJson(question.data()!);
+    final questionModel = QuestionModel.fromJson(question.docs.first.data());
     if (questionModel == null) {
-      throw Exception('Question not found');
+      throw Exception('Question $questionId not found');
     }
     log(questionModel.toString());
     return questionModel;
