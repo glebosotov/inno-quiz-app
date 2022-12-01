@@ -29,7 +29,21 @@ class _$ResultModelSerializer implements StructuredSerializer<ResultModel> {
           specifiedType: const FullType(BuiltMap,
               const [const FullType(String), const FullType(String)])),
     ];
-
+    Object? value;
+    value = object.id;
+    if (value != null) {
+      result
+        ..add('id')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.inviteId;
+    if (value != null) {
+      result
+        ..add('inviteId')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     return result;
   }
 
@@ -57,6 +71,14 @@ class _$ResultModelSerializer implements StructuredSerializer<ResultModel> {
               specifiedType: const FullType(BuiltMap,
                   const [const FullType(String), const FullType(String)]))!);
           break;
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
+        case 'inviteId':
+          result.inviteId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
       }
     }
 
@@ -71,12 +93,20 @@ class _$ResultModel extends ResultModel {
   final String quizId;
   @override
   final BuiltMap<String, String> answers;
+  @override
+  final String? id;
+  @override
+  final String? inviteId;
 
   factory _$ResultModel([void Function(ResultModelBuilder)? updates]) =>
       (new ResultModelBuilder()..update(updates))._build();
 
   _$ResultModel._(
-      {required this.username, required this.quizId, required this.answers})
+      {required this.username,
+      required this.quizId,
+      required this.answers,
+      this.id,
+      this.inviteId})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(username, r'ResultModel', 'username');
     BuiltValueNullFieldError.checkNotNull(quizId, r'ResultModel', 'quizId');
@@ -96,13 +126,19 @@ class _$ResultModel extends ResultModel {
     return other is ResultModel &&
         username == other.username &&
         quizId == other.quizId &&
-        answers == other.answers;
+        answers == other.answers &&
+        id == other.id &&
+        inviteId == other.inviteId;
   }
 
   @override
   int get hashCode {
-    return $jf(
-        $jc($jc($jc(0, username.hashCode), quizId.hashCode), answers.hashCode));
+    return $jf($jc(
+        $jc(
+            $jc($jc($jc(0, username.hashCode), quizId.hashCode),
+                answers.hashCode),
+            id.hashCode),
+        inviteId.hashCode));
   }
 
   @override
@@ -110,7 +146,9 @@ class _$ResultModel extends ResultModel {
     return (newBuiltValueToStringHelper(r'ResultModel')
           ..add('username', username)
           ..add('quizId', quizId)
-          ..add('answers', answers))
+          ..add('answers', answers)
+          ..add('id', id)
+          ..add('inviteId', inviteId))
         .toString();
   }
 }
@@ -131,6 +169,14 @@ class ResultModelBuilder implements Builder<ResultModel, ResultModelBuilder> {
       _$this._answers ??= new MapBuilder<String, String>();
   set answers(MapBuilder<String, String>? answers) => _$this._answers = answers;
 
+  String? _id;
+  String? get id => _$this._id;
+  set id(String? id) => _$this._id = id;
+
+  String? _inviteId;
+  String? get inviteId => _$this._inviteId;
+  set inviteId(String? inviteId) => _$this._inviteId = inviteId;
+
   ResultModelBuilder();
 
   ResultModelBuilder get _$this {
@@ -139,6 +185,8 @@ class ResultModelBuilder implements Builder<ResultModel, ResultModelBuilder> {
       _username = $v.username;
       _quizId = $v.quizId;
       _answers = $v.answers.toBuilder();
+      _id = $v.id;
+      _inviteId = $v.inviteId;
       _$v = null;
     }
     return this;
@@ -167,7 +215,9 @@ class ResultModelBuilder implements Builder<ResultModel, ResultModelBuilder> {
                   username, r'ResultModel', 'username'),
               quizId: BuiltValueNullFieldError.checkNotNull(
                   quizId, r'ResultModel', 'quizId'),
-              answers: answers.build());
+              answers: answers.build(),
+              id: id,
+              inviteId: inviteId);
     } catch (_) {
       late String _$failedField;
       try {

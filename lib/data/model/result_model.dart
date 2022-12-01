@@ -9,6 +9,8 @@ abstract class ResultModel implements Built<ResultModel, ResultModelBuilder> {
   String get username;
   String get quizId;
   BuiltMap<String, String> get answers;
+  String? get id;
+  String? get inviteId;
 
   ResultModel._();
   factory ResultModel([void Function(ResultModelBuilder) updates]) =

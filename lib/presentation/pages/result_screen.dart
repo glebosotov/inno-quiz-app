@@ -1,8 +1,11 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:inno_quiz_app/presentation/locator.dart';
 import 'package:inno_quiz_app/presentation/pages/navigation/router.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ResultPage extends ConsumerStatefulWidget {
   const ResultPage({super.key});
@@ -15,13 +18,14 @@ class _ResultPageState extends ConsumerState<ResultPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       body: SafeArea(
         child: Center(
           child: Container(
-            margin: const EdgeInsets.all(20),
+            // margin: const EdgeInsets.all(20),
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.secondaryContainer,
+              color: Colors.white,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
@@ -30,27 +34,111 @@ class _ResultPageState extends ConsumerState<ResultPage> {
               children: [
                 Text(
                   'Hey, ${ref.read(resultProvider).username}',
-                  style: Theme.of(context).textTheme.displaySmall,
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 50,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-                Text('We think you are a cute cat',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    textAlign: TextAlign.center),
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(text: 'We think you are a '),
+                      TextSpan(
+                        text: determineResult(ref.read(resultProvider).answers),
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                  style: TextStyle(color: Colors.black54, fontSize: 30),
+                ),
                 const SizedBox(height: 20),
+                // TODO: replace with copyrigth free image
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.network(
-                      'https://media.istockphoto.com/photos/bigeyed-naughty-obese-cat-behind-the-desk-with-red-hat-grey-color-picture-id1199279669?b=1&k=20&m=1199279669&s=170667a&w=0&h=munUsqGIlDAmKK0ouS12nHCuzDdoDfvNalw_hHvh6Ls='),
+                      'https://koreajoongangdaily.joins.com/data/photo/2022/04/01/96587477-f706-4c95-b158-cd54cf781305.jpg'),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                ElevatedButton(
-                    onPressed: () => context.router.navigate(MainRoute()),
-                    child: Text('Cool')),
+
+                FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton.icon(
+                          onPressed: () => context.router.navigate(MainRoute()),
+                          icon: Icon(Icons.replay),
+                          label: Text('Go again')),
+                      const SizedBox(width: 20),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          final uri = Uri.parse(
+                              'https://www.verywellmind.com/the-myers-briggs-type-indicator-2795583#');
+                          launchUrl(uri);
+                        },
+                        icon: Icon(Icons.question_mark_rounded),
+                        label: Text('What that means'),
+                      ),
+                    ],
+                  ),
+                ),
+
                 const SizedBox(
                   height: 20,
                 ),
-                Text(determineResult()),
+                FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 20),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (_) => Center(
+                              child: Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                      ref.read(resultProvider).inviteId ??
+                                          'ID not found'),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        icon: Icon(Icons.copy),
+                        label: Text('Save my result (get ID)'),
+                      ),
+                      if (ref.read(resultProvider).inviteId != null) ...[
+                        const SizedBox(width: 20),
+                        ElevatedButton(
+                            onPressed: () =>
+                                context.router.push(CompareRoute()),
+                            child: Text('Compare with friend')),
+                      ],
+                      if (ref.read(resultProvider).inviteId != null) ...[
+                        const SizedBox(width: 20),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            final id = ref.read(resultProvider).id;
+                            if (id != null) {
+                              Share.share(
+                                  'Hey! Find out which personality type are you at this link https://glebosotov.github.io/inno-quiz-app/#/signin/$id');
+                            }
+                          },
+                          icon: Icon(Icons.share),
+                          label: Text('Invite a friend'),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -58,26 +146,21 @@ class _ResultPageState extends ConsumerState<ResultPage> {
       ),
     );
   }
+}
 
-  String determineResult() {
-    final answers = ref
-        .read(resultProvider)
-        .answers
-        .entries
-        .map((e) => '${e.key}${e.value}')
-        .toSet();
+String determineResult(BuiltMap<String, String> map) {
+  final answers = map.entries.map((e) => '${e.key}${e.value}').toSet();
 
-    final eScore = e.keys.toSet().intersection(answers).length;
-    final iScore = i.keys.toSet().intersection(answers).length;
-    final sScore = s.keys.toSet().intersection(answers).length;
-    final nScore = n.keys.toSet().intersection(answers).length;
-    final tScore = t.keys.toSet().intersection(answers).length;
-    final fScore = f.keys.toSet().intersection(answers).length;
-    final jScore = j.keys.toSet().intersection(answers).length;
-    final pScore = p.keys.toSet().intersection(answers).length;
+  final eScore = e.keys.toSet().intersection(answers).length;
+  final iScore = i.keys.toSet().intersection(answers).length;
+  final sScore = s.keys.toSet().intersection(answers).length;
+  final nScore = n.keys.toSet().intersection(answers).length;
+  final tScore = t.keys.toSet().intersection(answers).length;
+  final fScore = f.keys.toSet().intersection(answers).length;
+  final jScore = j.keys.toSet().intersection(answers).length;
+  final pScore = p.keys.toSet().intersection(answers).length;
 
-    return '${eScore >= iScore ? 'E' : 'I'}${sScore >= nScore ? 'S' : 'N'}${tScore >= fScore ? 'T' : 'F'}${jScore >= pScore ? 'J' : 'P'}';
-  }
+  return '${eScore >= iScore ? 'E' : 'I'}${sScore >= nScore ? 'S' : 'N'}${tScore >= fScore ? 'T' : 'F'}${jScore >= pScore ? 'J' : 'P'}';
 }
 
 const Map<String, int> e = {

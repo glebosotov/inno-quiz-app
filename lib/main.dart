@@ -22,6 +22,14 @@ void main() async {
       options: DefaultFirebaseOptions.currentPlatform);
   log(app.toString());
   initLocator();
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.white,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
   runApp(
     ProviderScope(
       child: const MyApp(),

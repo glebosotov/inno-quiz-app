@@ -18,26 +18,47 @@ class _$AppRouter extends RootStackRouter {
   @override
   final Map<String, PageFactory> pagesMap = {
     MainRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<MainRouteArgs>(
+          orElse: () => MainRouteArgs(id: pathParams.optString('id')));
       return AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const MainPage(),
+        child: MainPage(
+          key: args.key,
+          id: args.id,
+        ),
       );
     },
     QuizRoute.name: (routeData) {
       final args =
           routeData.argsAs<QuizRouteArgs>(orElse: () => const QuizRouteArgs());
-      return AdaptivePage<dynamic>(
+      return CustomPage<dynamic>(
         routeData: routeData,
         child: QuizPage(
           quizName: args.quizName,
           key: args.key,
         ),
+        transitionsBuilder: TransitionsBuilders.slideLeft,
+        opaque: true,
+        barrierDismissible: false,
       );
     },
     ResultRoute.name: (routeData) {
-      return AdaptivePage<dynamic>(
+      return CustomPage<dynamic>(
         routeData: routeData,
         child: const ResultPage(),
+        transitionsBuilder: TransitionsBuilders.slideLeft,
+        opaque: true,
+        barrierDismissible: false,
+      );
+    },
+    CompareRoute.name: (routeData) {
+      return CustomPage<dynamic>(
+        routeData: routeData,
+        child: const ComparePage(),
+        transitionsBuilder: TransitionsBuilders.slideLeft,
+        opaque: true,
+        barrierDismissible: false,
       );
     },
   };
@@ -45,8 +66,14 @@ class _$AppRouter extends RootStackRouter {
   @override
   List<RouteConfig> get routes => [
         RouteConfig(
-          MainRoute.name,
+          '/#redirect',
           path: '/',
+          redirectTo: '/signin/:id',
+          fullMatch: true,
+        ),
+        RouteConfig(
+          MainRoute.name,
+          path: '/signin/:id',
         ),
         RouteConfig(
           QuizRoute.name,
@@ -56,19 +83,46 @@ class _$AppRouter extends RootStackRouter {
           ResultRoute.name,
           path: '/result-page',
         ),
+        RouteConfig(
+          CompareRoute.name,
+          path: '/compare-page',
+        ),
       ];
 }
 
 /// generated route for
 /// [MainPage]
-class MainRoute extends PageRouteInfo<void> {
-  const MainRoute()
-      : super(
+class MainRoute extends PageRouteInfo<MainRouteArgs> {
+  MainRoute({
+    Key? key,
+    String? id,
+  }) : super(
           MainRoute.name,
-          path: '/',
+          path: '/signin/:id',
+          args: MainRouteArgs(
+            key: key,
+            id: id,
+          ),
+          rawPathParams: {'id': id},
         );
 
   static const String name = 'MainRoute';
+}
+
+class MainRouteArgs {
+  const MainRouteArgs({
+    this.key,
+    this.id,
+  });
+
+  final Key? key;
+
+  final String? id;
+
+  @override
+  String toString() {
+    return 'MainRouteArgs{key: $key, id: $id}';
+  }
 }
 
 /// generated route for
@@ -115,4 +169,16 @@ class ResultRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'ResultRoute';
+}
+
+/// generated route for
+/// [ComparePage]
+class CompareRoute extends PageRouteInfo<void> {
+  const CompareRoute()
+      : super(
+          CompareRoute.name,
+          path: '/compare-page',
+        );
+
+  static const String name = 'CompareRoute';
 }

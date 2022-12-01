@@ -21,107 +21,147 @@ class _QuizLayoutState extends ConsumerState<QuizLayout> {
   int quiestionIndex = 0;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      constraints: BoxConstraints(
-        maxWidth: 400,
-        maxHeight: 400,
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            child: PageView.builder(
-              controller: _pageController,
-              itemCount: widget.quiz.questions.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  // margin: const EdgeInsets.all(20),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondaryContainer,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        widget.quiz.questions[index].text,
-                        style: Theme.of(context).textTheme.displaySmall,
-                        maxLines: 5,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 20),
-                      ...widget.quiz.questions[index].answers.entries
-                          .map(
-                            (e) => TextButton(
-                              onPressed: () {
-                                ref.read(quizRepository).updateResult(
-                                    widget
-                                        .quiz
-                                        .questions[_pageController.page!.ceil()]
-                                        .id,
-                                    e.key);
-                                if (widget.quiz.questions.length - 1 >
-                                    _pageController.page!) {
-                                  _pageController.nextPage(
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      curve: Curves.easeIn);
-                                } else {
-                                  ref.read(quizRepository).saveResult();
-                                  context.router.replace(ResultRoute());
-                                }
-                              },
-                              child: Text(e.value),
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+      body: SafeArea(
+        child: Center(
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            margin: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            constraints: BoxConstraints(
+              maxWidth: 400,
+              maxHeight: MediaQuery.of(context).size.height * 0.7,
+            ),
+            child: Column(
+              children: [
+                Expanded(
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: widget.quiz.questions.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        // margin: const EdgeInsets.all(20),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color:
+                              Theme.of(context).colorScheme.secondaryContainer,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const SizedBox(height: 20),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              child: Text(
+                                widget.quiz.questions[index].text,
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                                maxLines: 5,
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                          )
-                          .toList(),
-                    ],
+                            const SizedBox(height: 20),
+                            Spacer(),
+                            ...widget.quiz.questions[index].answers.entries
+                                .map(
+                                  (e) => Padding(
+                                    padding: const EdgeInsets.only(
+                                      bottom: 8.0,
+                                      right: 16,
+                                      left: 16,
+                                    ),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        foregroundColor: Colors.black87,
+                                        side: BorderSide(
+                                          color: Colors.black12,
+                                        ),
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .secondaryContainer,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        setState(() {});
+                                        ref.read(quizRepository).updateResult(
+                                            widget
+                                                .quiz
+                                                .questions[_pageController.page!
+                                                    .ceil()]
+                                                .id,
+                                            e.key);
+                                        if (widget.quiz.questions.length - 1 >
+                                            _pageController.page!) {
+                                          _pageController.nextPage(
+                                              duration: const Duration(
+                                                  milliseconds: 150),
+                                              curve: Curves.easeIn);
+                                        } else {
+                                          ref.read(quizRepository).saveResult();
+                                          context.router.replace(ResultRoute());
+                                        }
+                                      },
+                                      child: Text(
+                                        e.value,
+                                        style:
+                                            Theme.of(context).textTheme.button,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                            const SizedBox(height: 16),
+                          ],
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+                const SizedBox(height: 20),
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.black87,
+                    backgroundColor:
+                        Theme.of(context).colorScheme.tertiaryContainer,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () {
+                    if (_pageController.hasClients &&
+                        _pageController.page != 0) {
+                      _pageController.previousPage(
+                        duration: const Duration(milliseconds: 150),
+                        curve: Curves.easeInOut,
+                      );
+                    }
+                  },
+                  icon: Icon(
+                    Icons.arrow_back_rounded,
+                    size: 16,
+                  ),
+                  label: Text('Go back'),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 20),
-
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: [-2, -1, 0, 1, 2]
-          //       .map(
-          //         (e) => ElevatedButton(
-          //           onPressed: () {
-          //             ref.read(quizRepository).updateResult(
-          //                 widget
-          //                     .quiz.questions[_pageController.page!.ceil()].id,
-          //                 e.toString());
-          //             if (widget.quiz.questions.length - 1 >
-          //                 _pageController.page!) {
-          //               _pageController.nextPage(
-          //                   duration: const Duration(milliseconds: 300),
-          //                   curve: Curves.easeIn);
-          //             } else {
-          //               ref.read(quizRepository).saveResult();
-          //               context.router.replace(ResultRoute());
-          //             }
-          //           },
-          //           child: Text(e.toString(),
-          //               style: Theme.of(context).textTheme.bodyLarge),
-          //         ),
-          //       )
-          //       .toList(),
-          // ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-              onPressed: _pageController.hasClients
-                  ? _pageController.page == 0
-                      ? null
-                      : () {}
-                  : null,
-              child: Text('Go back')),
-        ],
+        ),
       ),
     );
   }

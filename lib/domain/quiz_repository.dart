@@ -66,16 +66,28 @@ class QuizRepository {
     final username = _ref.read(resultProvider).username;
     _ref.read(quizProvider.notifier).rebuildState((p0) => p0.replace(quiz));
     _ref.read(resultProvider.notifier).rebuildState((p0) {
-      p0.replace(ResultModel.empty());
+      // p0.replace(ResultModel.empty());
       p0.quizId = quiz.name;
       p0.username = username;
     });
     return quiz;
   }
 
+  Future<ResultModel?> getResult(String docId) async {
+    final result = await _firestore.collection('results').doc(docId).get();
+    if (result.data() == null) {
+      return null;
+    }
+    return ResultModel.fromJson(result.data()!);
+  }
+
   Future<void> saveResult() async {
     final result = _ref.read(resultProvider);
-    await _firestore.collection('results').add(result.toJson());
+    final refToResult =
+        await _firestore.collection('results').add(result.toJson());
+    _ref
+        .read(resultProvider.notifier)
+        .rebuildState((p0) => p0.id = refToResult.id);
   }
 
   Future<void> updateResult(

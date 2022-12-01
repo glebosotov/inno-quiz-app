@@ -26,15 +26,9 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -54,11 +48,31 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyAcDxIKCVUb0YiE6HNvo9sBF0OLGaL14Xs',
+    appId: '1:304492835662:web:3b083e0d2584f4e271e41f',
+    messagingSenderId: '304492835662',
+    projectId: 'quiz-app-inno',
     authDomain: 'quiz-app-inno.firebaseapp.com',
+    storageBucket: 'quiz-app-inno.appspot.com',
+    measurementId: 'G-2C2FZK3N8P',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyA0K6aSkut04_vuR1xJMkaYFYLnwmWdC7U',
+    appId: '1:304492835662:ios:daffec8fba2726ce71e41f',
+    messagingSenderId: '304492835662',
     projectId: 'quiz-app-inno',
     storageBucket: 'quiz-app-inno.appspot.com',
+    iosClientId: '304492835662-93gna6klpqqviv886qjcu5q1oklsvdsb.apps.googleusercontent.com',
+    iosBundleId: 'com.example.innoQuizApp',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyA0K6aSkut04_vuR1xJMkaYFYLnwmWdC7U',
+    appId: '1:304492835662:ios:daffec8fba2726ce71e41f',
     messagingSenderId: '304492835662',
-    appId: '1:304492835662:web:3b083e0d2584f4e271e41f',
-    measurementId: 'G-2C2FZK3N8P',
+    projectId: 'quiz-app-inno',
+    storageBucket: 'quiz-app-inno.appspot.com',
+    iosClientId: '304492835662-93gna6klpqqviv886qjcu5q1oklsvdsb.apps.googleusercontent.com',
+    iosBundleId: 'com.example.innoQuizApp',
   );
 }
