@@ -163,7 +163,7 @@ class _MainPageState extends ConsumerState<MainPage> {
   }
 
   Future<void> _displayTextInputDialog(BuildContext context) async {
-    final _textController = TextEditingController();
+    final textController = TextEditingController();
     return showDialog(
         context: context,
         builder: (context) {
@@ -175,8 +175,8 @@ class _MainPageState extends ConsumerState<MainPage> {
                   _id = value;
                 });
               },
-              controller: _textController,
-              decoration: InputDecoration(hintText: "Enter ID"),
+              controller: textController,
+              decoration: InputDecoration(hintText: 'Enter ID'),
             ),
             actions: <Widget>[
               ElevatedButton(
